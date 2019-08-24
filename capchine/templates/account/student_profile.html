@@ -1,0 +1,265 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Project Cappuchino</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/modern-business.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="/">ProjectCappuchino</a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'edit' %}">Edit Profile</a>
+          </li>
+          {% ifequal role "Teacher" %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'search' %}">Search</a>
+          </li>
+          {% endifequal %}
+          <li class="nav-item">
+              {% if request.user.is_authenticated %}
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              {% else %}
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+              {% endif %}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Page Heading/Breadcrumbs -->
+    <br>
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="/">Home</a>
+      </li>
+      <li class="breadcrumb-item active">Profile Information</li>
+    </ol>
+
+
+
+    <div class="col-md-8">
+        <div class="tab-content profile-tab" id="myTabContent">
+            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Role</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Student</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>{{name}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                              <label>Registered</label>
+                          </div>
+                          <div class="col-md-6">
+                              <p>{{rgstrd|date}}</p>
+                          </div>
+                      </div>
+                        <p><b>Ratings Summary</b></p>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Summary attention</label>
+                          </div>
+                          <div class="col-md-6">
+                            <p>{{attnt}}</p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Summary Performance</label>
+                          </div>
+                          <div class="col-md-6">
+                            <p>{{prfrm}}</p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Summary Punctuality</label>
+                          </div>
+                          <div class="col-md-6">
+                            <p>{{punct}}</p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+                            <label>Summary Cooperation</label>
+                          </div>
+                          <div class="col-md-6">
+                            <p>{{coop}}</p>
+                          </div>
+                        </div>
+                        
+            </div>
+            
+        </div>
+    </div>
+<hr>
+{% if not rtng %}
+<h3 style = color:blue> Ratings</h3>
+<hr>
+
+{% for r in ratings %}
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+              <label>Attention</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{r.attention}}</p>
+            </div>   
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label>Performance</label>
+          </div>
+          <div class="col-md-6">
+            <p>{{r.performance}}</p>
+          </div>   
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <label>Punctuality</label>
+        </div>
+        <div class="col-md-6">
+          <p>{{r.punctuality}}</p>
+        </div>   
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Cooperation</label>
+      </div>
+      <div class="col-md-6">
+        <p>{{r.cooperation}}</p>
+      </div>   
+  </div>
+      </div>
+      <div class="card-footer text-muted">
+        Rated on {{r.created}} by {{r.teacher}} with code {{r}}
+      </div>
+    </div>
+  {% empty %}
+  <p>No ratings to show yet.</p>
+
+{% endfor %}
+
+{% endif %}
+
+<br>
+{% if rtng %}
+<div class="card mb-4">
+  {% if edt_rating %}
+    <h1><b>Edit the Rating</b></h1>
+  {% else %}
+    <h1><b>Rate the student</b></h1>
+  {% endif %}
+    <div class="card-body">
+	
+
+
+
+
+  
+  <form action="{% url 'student_rating' %}" method="GET">
+  <legend>Attention</legend>
+  <select name="attnt">
+  <option value="1">*</option>
+  <option value="2">**</option>
+  <option value="3">***</option>
+  <option value="4">****</option>
+  <option value="5">*****</option>
+  </select>
+  <br>
+  <legend>Performance</legend>
+  <select name="prfrm">
+  <option value="1">*</option>
+  <option value="2">**</option>
+  <option value="3">***</option>
+  <option value="4">****</option>
+  <option value="5">*****</option>
+  </select>
+  <br>
+  <legend>Punctuality</legend>
+  <select name="punct">
+  <option value="1">*</option>
+  <option value="2">**</option>
+  <option value="3">***</option>
+  <option value="4">****</option>
+  <option value="5">*****</option>
+  </select>
+  <br>
+  <legend>Cooperation</legend>
+  <select name="coop">
+  <option value="1">*</option>
+  <option value="2">**</option>
+  <option value="3">***</option>
+  <option value="4">****</option>
+  <option value="5">*****</option>
+  </select>
+  <br>
+  <input type="hidden" name="custId" value={{stdnt.username}}>
+  <input type="hidden" name="code" value={{s}}>
+  <br>
+<button type="submit" class="btn btn-primary" id="sendMessageButton">Rate</button>
+  
+  </form>
+  </div>
+  </div>
+  {% endif %}
+
+
+  </div>
+ 
+
+
+  </div>
+
+  <!-- /.container -->
+
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+</html>
