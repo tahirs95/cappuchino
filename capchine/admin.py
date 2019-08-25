@@ -27,13 +27,7 @@ class SearchCodeAdmin(admin.ModelAdmin):
 admin.site.register(SearchCode, SearchCodeAdmin)
 
 class SearchAdmin(admin.ModelAdmin):
+    title = 'Searches'
     list_display = ('code','created')
 admin.site.register(Search, SearchAdmin)
 
-class RatingCodeAdmin(admin.ModelAdmin):
-    list_display = ('code','u','created')
-admin.site.register(RatingCode, RatingCodeAdmin)
-
-class RatingAdmin(admin.ModelAdmin):
-    list_display = ('code','rating','created')
-admin.site.register(Rating, RatingAdmin)

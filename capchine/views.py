@@ -66,6 +66,13 @@ def user_registration(request):
         if user_form.is_valid():
             new_user = user_form.save(commit=False)
             new_user.set_password(user_form.cleaned_data['password'])
+            u_name = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(20))
+            chk_u = User.objects.filter(username = u_name)
+            while len(chk_u)>0:
+                u_name = ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(20))
+                chk_u = User.objects.filter(username = u_name)
+            
+            new_user.username = u_name
             new_user.is_active = False
             new_user.save()
             u_role = request.POST['role']

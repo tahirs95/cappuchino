@@ -14,11 +14,11 @@ class RegistrationForm(forms.ModelForm):
     email = forms.EmailField(label=' ',required=True, widget=forms.EmailInput(attrs={'maxlength':150,'placeholder':'Email'}))
     first_name = forms.CharField(label=' ',widget=forms.TextInput(attrs={'maxlength':150,'placeholder':'First Name'}))
     last_name = forms.CharField(label = ' ',widget=forms.TextInput(attrs={'maxlength':150,'placeholder':'Last Name'}))
-    username = forms.CharField(label=' ',widget=forms.TextInput(attrs={'maxlength':150,'placeholder':'Username'}))
+    #username = forms.CharField(label=' ',widget=forms.TextInput(attrs={'maxlength':150,'placeholder':'Username'}))
 
     class Meta:
         model = User
-        fields = ('username','first_name','last_name','email')
+        fields = ('first_name','last_name','email')
 
 
 
